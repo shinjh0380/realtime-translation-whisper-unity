@@ -357,6 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   microphoneRecord: {fileID: 0}
+  whisperManager: {fileID: 0}
   gptManager: {fileID: 0}
   streamSegments: 1
   button: {fileID: 320968413}
@@ -389,7 +390,6 @@ MonoBehaviour:
   dropVadPart: 1
   vadStopTime: 3
   exportMp3VadStop: 1
-  exportMp3DropVadPart: 1
   exportMp3VadStopTime: 1
   microphoneDropdown: {fileID: 0}
   microphoneDefaultLabel: Default microphone
@@ -854,7 +854,6 @@ GameObject:
   - component: {fileID: 1130880591}
   - component: {fileID: 1130880592}
   - component: {fileID: 1130880593}
-  - component: {fileID: 1130880594}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -935,22 +934,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RaycastPrefab: {fileID: 8733705327817542694, guid: af2e8b6040cd63f4f8a95004ab1ee967, type: 3}
---- !u!114 &1130880594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130880588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5fb468352f6c384d9cb5aac4fb2d28f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objs:
-  - {fileID: 8733705327817542694, guid: af2e8b6040cd63f4f8a95004ab1ee967, type: 3}
-  - {fileID: 8408923776062269948, guid: a642112b13805e249802f94fb17c74b1, type: 3}
-  curRotSpeed: 0.3
 --- !u!1 &1302712612
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,8 +944,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1302712613}
   - component: {fileID: 1302712614}
+  - component: {fileID: 1302712615}
   m_Layer: 0
-  m_Name: GPTManager
+  m_Name: OpenAIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -996,6 +980,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   promptText: {fileID: 577375297}
+--- !u!114 &1302712615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302712612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dd398e86a1aec246ab2d0c627cd298a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1440132866
 GameObject:
   m_ObjectHideFlags: 0
