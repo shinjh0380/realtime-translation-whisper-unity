@@ -46,7 +46,6 @@ public class WhisperManager : MonoBehaviour
         
         yield return www.SendWebRequest();
 
-        // 응답 처리
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("Error: " + www.error);
@@ -59,7 +58,6 @@ public class WhisperManager : MonoBehaviour
 
             try
             {
-                // JSON 응답을 객체로 변환
                 ResponseData responseData = JsonConvert.DeserializeObject<ResponseData>(jsonResponse);
                 if (responseData != null)
                 {

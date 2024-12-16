@@ -29,10 +29,8 @@ namespace dev.SJH.Utill
         public bool loop;
         [Tooltip("마이크 샘플링 속도")]
         public int frequency = 16000;
-        [Tooltip("오디오 청크의 길이(초 단위). 스트리밍에 유용")]
+        [Tooltip("오디오 청크의 길이(초 단위).")]
         public float chunksLengthSec = 0.5f;
-        [Tooltip("녹음 완료 후 마이크가 에코를 재생해야 하는지 여부")]
-        public bool echo = true;
         
         [Header("음성 활동 감지(VAD)")]
         [Tooltip("마이크가 오디오 입력에 음성이 있는지 확인해야 하는지 여부")]
@@ -61,12 +59,6 @@ namespace dev.SJH.Utill
         [Header("VAD 일정 시간 종료 감지 시 MP3 EXPORT")]
         public bool exportMp3VadStop;
         public float exportMp3VadStopTime = 3f;
-        
-        [Header("마이크 선택(옵션)")] 
-        [Tooltip("사용 가능한 모든 마이크 입력을 포함한 선택적 UI 드롭다운")]
-        [CanBeNull] public Dropdown microphoneDropdown;
-        [Tooltip("드롭다운에서 기본 마이크 입력의 라벨")]
-        public string microphoneDefaultLabel = "Default microphone";
 
         public event OnVadChangedDelegate OnVadChanged;
         public event OnChunkReadyDelegate OnChunkReady;
@@ -103,20 +95,6 @@ namespace dev.SJH.Utill
         public bool IsVoiceDetected { get; private set; }
 
         public IEnumerable<string> AvailableMicDevices => Microphone.devices;
-
-        private void Awake()
-        {
-            if(microphoneDropdown != null)
-            {
-                microphoneDropdown.options = AvailableMicDevices
-                    .Prepend(microphoneDefaultLabel)
-                    .Select(text => new Dropdown.OptionData(text))
-                    .ToList();
-                microphoneDropdown.value = microphoneDropdown.options
-                    .FindIndex(op => op.text == microphoneDefaultLabel);
-                microphoneDropdown.onValueChanged.AddListener(OnMicrophoneChanged);
-            }
-        }
 
         private void Update()
         {
@@ -302,14 +280,6 @@ namespace dev.SJH.Utill
                 IsVoiceDetected = false;
                 OnVadChanged?.Invoke(false);   
             }
-            
-            if (echo)
-            {
-                var echoClip = AudioClip.Create("echo", data.Length,
-                    _clip.channels, _clip.frequency, false);
-                echoClip.SetData(data, 0);
-                PlayAudioAndDestroy.Play(echoClip, Vector3.zero);
-            }
 
             OnRecordStop?.Invoke(finalAudio);
         }
@@ -317,12 +287,6 @@ namespace dev.SJH.Utill
 
     public partial class MicrophoneRecord
     {
-        private void OnMicrophoneChanged(int ind)
-        {
-            if (microphoneDropdown == null) return;
-            var opt = microphoneDropdown.options[ind];
-            SelectedMicDevice = opt.text == microphoneDefaultLabel ? null : opt.text;
-        }
         private float[] GetMicBuffer(float dropTimeSec = 0f)
         {
             var micPos = Microphone.GetPosition(RecordStartMicDevice);

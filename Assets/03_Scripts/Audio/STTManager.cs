@@ -9,37 +9,11 @@ public class STTManager : MonoBehaviour
     public MicrophoneRecord microphoneRecord;
     public WhisperManager whisperManager;
 
-    public bool streamSegments = true;
-    
-    [Header("UI")]
-    public Button button;
-    public Text buttonText;
-
-    private string _buffer;
-
     private void Awake()
     {
         microphoneRecord = FindObjectOfType<MicrophoneRecord>();
         whisperManager = FindObjectOfType<WhisperManager>();
-        button.onClick.AddListener(OnButtonPressed);
-    }
-
-    private void OnEnable()
-    {
-        microphoneRecord.OnChunkExportMp3 += OnExportMP3;
-        microphoneRecord.OnChunkReady += OnChunkReady;
-        microphoneRecord.OnRecordStop += OnRecordStop;
-    }
-
-    private void OnDisable()
-    {
-        microphoneRecord.OnChunkExportMp3 -= OnExportMP3;
-        microphoneRecord.OnChunkReady -= OnChunkReady;
-        microphoneRecord.OnRecordStop -= OnRecordStop;
-    }
-
-    private void OnButtonPressed()
-    {
+        
         if (Microphone.devices.Length == 0)
         {
             print("마이크 장치가 없습니다.");
@@ -50,10 +24,18 @@ public class STTManager : MonoBehaviour
         {
             microphoneRecord.StartRecord();
         }
-        else
-            microphoneRecord.StopRecord();
-        
-        buttonText.text = microphoneRecord.IsRecording ? "Stop" : "Record";
+    }
+
+    private void OnEnable()
+    {
+        microphoneRecord.OnChunkExportMp3 += OnExportMP3;
+        microphoneRecord.OnChunkReady += OnChunkReady;
+    }
+
+    private void OnDisable()
+    {
+        microphoneRecord.OnChunkExportMp3 -= OnExportMP3;
+        microphoneRecord.OnChunkReady -= OnChunkReady;
     }
     
     private void OnChunkReady(AudioChunk chunk)
@@ -70,8 +52,6 @@ public class STTManager : MonoBehaviour
     
     private void OnExportMP3(AudioChunk recordedAudio)
     {
-        _buffer = "";
-
         try
         {
             string filename = "final_recording"; // 녹음 종료 WAV 파일 이름
@@ -83,13 +63,4 @@ public class STTManager : MonoBehaviour
             Debug.LogError($"녹음 종료 WAV 저장 중 오류 발생: {ex.Message}");
         }
     }
-    
-    private void OnRecordStop(AudioChunk recordedAudio)
-    {
-        buttonText.text = "Record";
-        _buffer = "";
-    }
-    
-    
-    
 }
